@@ -1,10 +1,4 @@
-type DogSingleProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function DogSingle({ params }: DogSingleProps) {
+export default async function DogSingle({ params }: { params: { id: string } }) {
   const { id } = params;
 
   const res = await fetch(`https://api.thedogapi.com/v1/images/${id}`, {
@@ -21,7 +15,15 @@ export default async function DogSingle({ params }: DogSingleProps) {
     );
   }
 
-  const data = await res.json();
+  const data: {
+    url: string;
+    breeds: {
+      name: string;
+      height: { metric: string };
+      weight: { metric: string };
+      temperament?: string;
+    }[];
+  } = await res.json();
 
   if (!data || !data.breeds || data.breeds.length === 0) {
     return (
@@ -51,15 +53,11 @@ export default async function DogSingle({ params }: DogSingleProps) {
 
         <div className="flex flex-wrap gap-6 text-gray-700 dark:text-gray-300 text-lg font-medium">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-xl px-5 py-3 shadow-md flex-1 min-w-[150px] text-center">
-            <h2 className="text-sm uppercase text-gray-500 dark:text-gray-400 mb-1">
-              Height
-            </h2>
+            <h2 className="text-sm uppercase text-gray-500 dark:text-gray-400 mb-1">Height</h2>
             <p>{dogData.height.metric} cm</p>
           </div>
           <div className="bg-gray-100 dark:bg-gray-800 rounded-xl px-5 py-3 shadow-md flex-1 min-w-[150px] text-center">
-            <h2 className="text-sm uppercase text-gray-500 dark:text-gray-400 mb-1">
-              Weight
-            </h2>
+            <h2 className="text-sm uppercase text-gray-500 dark:text-gray-400 mb-1">Weight</h2>
             <p>{dogData.weight.metric} kg</p>
           </div>
         </div>
