@@ -1,9 +1,20 @@
 import DogCart from "../component/dog-cart";
 
+interface Breed {
+  name: string;
+  temperament: string;
+  height: {
+    metric: string;
+  };
+  weight: {
+    metric: string;
+  };
+}
+
 interface DogApiResponse {
   id: string;
   url: string;
-  breeds: any[];
+  breeds: Breed[];
 }
 
 export default async function DogsPage() {
